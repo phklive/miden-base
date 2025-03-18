@@ -1,16 +1,22 @@
-# Performs checks, builds and deploys the mdbook
+# Builds and deploys the mdbook
 
 name: book
 
 on:
   push:
-    branches: [main, next]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup mdbook and extensions
         run: |
@@ -18,8 +24,8 @@ jobs:
           rustup update --no-self-update stable
           cargo +stable install mdbook mdbook-katex mdbook-linkcheck mdbook-alerts
 
-      - name: Build book
-        run: mdbook build docs
+      - name: Build Book
+        run: mdbook build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -27,7 +33,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "docs/book"
+          path: "book"
 
       - name: Deploy to GitHub Pages
         id: deployment
