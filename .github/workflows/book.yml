@@ -8,6 +8,9 @@ jobs:
   deploy:
     name: Deploy mdbook
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     steps:
       - uses: actions/checkout@main
       - name: Install katex, alerts and linkcheck
